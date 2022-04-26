@@ -33,6 +33,7 @@ namespace SanctionScannerTask
          */
         public static void GetValues(List<HtmlNode> htmlNodes, List<string> list, List<double> prices)
         {
+            Console.WriteLine("{0,40} {1,48}\n", "| Product Names |", "| Prices |");
             foreach (var link in htmlNodes)
             {
                 var productName = link.SelectSingleNode(".//a[contains(@class,'classifiedTitle')]").GetDirectInnerText().Trim();
@@ -44,9 +45,8 @@ namespace SanctionScannerTask
                 double price = double.Parse(priceStr.Substring(0, index));
                 prices.Add(price);
 
-                Console.WriteLine(productName + " : " + priceStr + "\n");
+                Console.WriteLine("{0,-70} {1, 20:N0}", productName, priceStr + "\n");
             }
-
             Console.WriteLine("\n\n-------- The Average Price of Product Prices --------");
             Console.WriteLine("\n\t\t" + prices.Average() + " TL");
         }
@@ -71,20 +71,22 @@ namespace SanctionScannerTask
             try
             {
                 //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter output = new StreamWriter(Environment.CurrentDirectory + @"./List.txt");
+                StreamWriter output = new StreamWriter(@"./List.txt");
+                output.WriteLine("{0,-20} {1,70}\n","| Product Names |", "| Prices |");
 
                 for(int i = 0; i < prices.Count; i++)
                 {
-                    output.WriteLine(productNames[i] + " : " + prices[i] + "TL\n");
+                    output.WriteLine("{0,-70} {1, 20:N0}", productNames[i], prices[i] + " TL\n");
                 }
 
-                //Close the file
                 output.Close();
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
+
+            Console.ReadKey();
         }
     }
 }
